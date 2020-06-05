@@ -1,0 +1,328 @@
+/* .modal-body-main{
+  display: inline-block;
+  width: 760px;
+  background: #f4f5f7;
+  padding: 20px ;
+}
+.modal-body-bar{
+  float: right;
+  width: 150px;
+  margin:  0px 20px;
+}
+.modal-card{
+  height: 800px;
+}
+.description{
+
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  min-height: 40px;
+  padding: 8px 12px;
+  text-decoration: none;
+  margin-left: 20px;
+  
+}
+.input-des{
+width: 90%;
+margin-left: 20px;
+height: 120px;
+}
+.button-link {
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  height: 32px;
+  margin-top: 8px;
+  max-width: 300px;
+  overflow: hidden;
+  padding: 6px 12px;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  transition-property: background-color,border-color,box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+}
+a {
+  color: #172b4d;
+}
+h5{
+  margin: 20px auto;
+}
+.btn-save{
+margin-left: 20px ;
+}
+#user-modal img{
+  border-radius: 50%;
+ }
+#user-modal{
+   display: inline;
+   margin: 0px 2px;
+ }
+.main-member{
+     margin: 20px  0px;
+ }
+.addmem-modal{
+  display: inline;
+}
+
+.modal-body-main span{
+  margin-right: 10px;
+}
+.deadline span{
+margin-right: 15px;
+}
+.deadline p{
+margin-left: 30px;
+}
+.addmem-modal button{
+  background: transparent;
+  width: fit-content;
+}
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.list-checkbox{
+    margin-left: 20px;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.modal-header{
+  display: block;
+} */
+
+.modal-body-main{
+  display: inline-block;
+  width: 100%;
+  /* background: #f4f5f7; */
+}
+.modal-body-bar{
+  float: right;
+  width: 150px;
+  margin:  0px 20px;
+}
+.modal-card{
+  height: 680px;
+  background-image: linear-gradient(to bottom right, rgb(182, 255, 249), rgb(45, 141, 252));  }
+.modal-body{
+overflow-x: hidden;
+overflow-y: scroll;
+}
+.description{
+
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  display: block;
+  min-height: 40px;
+  padding: 8px 12px;
+  text-decoration: none;
+  margin-left: 20px;
+  
+}
+.input-des{
+width: 90%;
+margin-left: 20px;
+height: 120px;
+}
+.button-link {
+  background-color: rgba(9,30,66,.04);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  height: 32px;
+  margin-top: 8px;
+  max-width: 300px;
+  overflow: hidden;
+  padding: 6px 12px;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  transition-property: background-color,border-color,box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+}
+a {
+  color: #172b4d;
+}
+h5{
+  margin: 20px auto;
+}
+.btn-save{
+margin-left: 20px ;
+}
+#user-modal img{
+  border-radius: 50%;
+ }
+#user-modal{
+   display: inline;
+   margin: 0px 2px;
+ }
+.main-member{
+     margin: 20px  0px;
+ }
+.addmem-modal{
+  display: inline;
+}
+
+.modal-body-main span{
+  margin-right: 10px;
+}
+.deadline span{
+margin-right: 15px;
+}
+.deadline p{
+margin-left: 30px;
+}
+.addmem-modal button{
+  background: transparent;
+  width: fit-content;
+}
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.list-checkbox{
+    margin-left: 20px;
+}
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.modal-header{
+  display: block;
+}
+.modal-body-main .glyphicon{
+color: #2196F3;
+}
+.dropdownleft{
+  width: 200px !important;
+}
