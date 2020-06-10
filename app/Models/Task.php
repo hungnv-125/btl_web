@@ -9,7 +9,7 @@ class Task extends Model
     protected $table = "task";
 
     public $timestamps = false;
-    protected $fillable = ['description', 'id_list'];
+    protected $fillable = ['description', 'id_list', 'deadline'];
 
     public function work()
     {

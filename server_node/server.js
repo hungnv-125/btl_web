@@ -12,9 +12,15 @@ io.on('error', function(socket){
     console.log('error')
     
 })
+
+
 io.on('connection', function(socket){
     console.log('Co nguoi ket ngoi '+ socket.id)  
     // io.emit('chat', "connection")
+
+    socket.on('disconnect', function() {
+        console.log('Ngat ket ngoi '+ socket.id)
+     });
     socket.on('room', function(room){
         console.log(room);
         socket.join(room);
@@ -51,6 +57,15 @@ io.on('connection', function(socket){
 
     socket.on('addList', function(data){
         socket.to(data.room).emit('addList', data);
+    })
+    socket.on('updateMemberCard', function(data){
+        socket.to(data.room).emit('updateMemberCard', data);
+    })
+    socket.on('notification', function(data){
+        io.emit('notification', data);
+    })
+    socket.on('updateDeadline', function(data){
+        socket.to(data.room).emit('updateDeadline', data);
     })
 })
 

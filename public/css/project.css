@@ -1,212 +1,3 @@
-/* .board-header {
-    background: rgb(0, 174, 204);
-    height: 45px;
-
-}
-
-.name{
-    display: inline;
-    color: ivory;
-    font-size: 18px;
-    margin:auto 20px ;
-    font-weight: 600;
-    padding-right: 10px;
-    border-right: 1px solid whitesmoke;
-}
-.member{
-    display: inline;
-    color: ivory;
-    font-size: 15px;
-    margin: 20px 0 0 0  ;
-    font-weight: 500;
-
-}
-.mem{
-    display: inline ;
-}
-.mem img{
-    border-radius: 50%;
-    margin: auto;
-}
-.addmem{
-    display: inline;
-}
-.glyphicon-plus-sign{
-    color: white !important;
-    font-size: 25px;
-}
-
-.menu{
-    display: inline;
-    float: right;
-}
-.list{
-    background: #e5e5e5;
-    margin: 0 4px;
-    border-radius: 3px;
-    display: inline-block;
-    width: 272px;
-    white-space: normal;
-    height: 100%;
-}
-.cover{
-    padding-left: 20px;
-}
-.list-name{
-    background: transparent;
-}
-.setting{
-    float: right;
-}
-
-.name-work{
-    display: inline-block;
-    color: #191919;
-    font-size: 18px;
-    margin: 10px 20px ;
-    font-weight: 600;
-    padding-right: 10px;
-    border-right: 1px solid whitesmoke;
-
-}
-.dropdown-menu{
-    width: 300px;
-    padding: 10px;
-}
-.dropdown-item{
-    margin: 10px 0px  ;
-}
-.btn-block{
-    margin:5px  !important;
-    width: 95% !important;
-}
-
-.list-item{
-background: #ffffff;
-border-radius: 5px;
-margin: 8px  ;
-padding: 8px;
-height: 50px;
-}
-#locationadd{
-background: #e5e5e5;
-border-radius: 5px;
-margin: 8px ;
-}
-.addcard{
- height: 60px !important;
- width: 95% !important;
-}
-
-.add-list{
-    margin: 0 4px;
-    border-radius: 5px;
-    display: inline-block;
-    width: 272px;
-    height: auto;
-}
-#locationlist{
-    background: transparent;
-    border-radius: 5px;
-    margin: 8px ;
-    height: auto;
-    }
-.location-drag{
-    border: 1px solid #aaaaaa;
-    height: 60px;
-
-}
-.file span{
-    margin-right: 20px;
-}
-.filename{
-    background-color: rgba(9,30,66,.04);
-    box-shadow: none;
-    border: none;
-    border-radius: 3px;
-    display: block;
-    min-height: 40px;
-    padding: 8px 12px;
-    text-decoration: underline;
-    margin-left: 20px;
-    margin-bottom: 5px;
-
-    
-}
-.side-menu{
-    color: whitesmoke !important;
-    font-size: 16px !important;
-}
-.sidebar{
-    height: 100%;
-    width: 300px;
-    background-color: #fff;
-    position: fixed!important;
-    z-index: 1;
-    overflow: auto;
-}
-.closemenu{
-    text-align: center !important;
-}
-hr{
-    margin: 0px 10px !important;
-}
-.friendname{
-    margin-left: 10px;
-}
-a:focus, a:hover {
-    color: #23527c;
-    text-decoration: none !important;
-}
-.zoom:hover {
-    -ms-transform: scale(1.1); 
-    -webkit-transform: scale(1.1); 
-    transform: scale(1.1); 
-
-  }
-.dropprofile{
-      margin-right: 20px !important;
-  }
-.profile-item{
-      padding: 10px !important;
-  }
-.w3-bar-block .w3-bar-item {
-    width: 100%;
-    display: block;
-    padding: 8px 16px;
-    text-align: left;
-    border: none;
-    white-space: normal;
-    float: none;
-    outline: 0;
-}  
-.w3-large {
-    font-size: 18px!important;
-}
-.username{
-    margin: 0px 10px;
-    color: #5e6c84;
-}
-.dropdown{
-    display: inline;
-}
-.dropdown2{
-    margin-top: 20px !important;
-}
-.dropbtn{
-    float: right;
-}
-.searchmem a{
-    display: block;
-    margin: 10px 20px;
-
-}
-.searchmem{
-    overflow:auto;
-    height: 150px;
-} 
-
- */
 
 
  .board-header {
@@ -234,6 +25,7 @@ a:focus, a:hover {
 }
 .mem{
     display: inline ;
+    width: 80%;
 }
 .mem img{
     border-radius: 50%;
@@ -415,7 +207,7 @@ a:focus, a:hover {
     margin: 10px 20px;
 
 }
-.searchmem{
+.searchmem, .searchmem-card{
     overflow:auto;
     height: 150px;
 }
@@ -512,4 +304,124 @@ a:focus, a:hover {
 }
 .addmember{
     display: none;
+}
+
+
+.duetime{
+    float: right;
+    background: rgb(121, 219, 146);
+    border-radius: 3px;
+    text-align: center;
+    line-height: 1.9;
+    padding: 0px 5px;
+    color: #ffffff;
+}
+.duetime-2{
+    float: right;
+    background: #2671b2;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 1.9;
+    padding: 0px 5px;
+    color: #ffffff;
+}
+.duetime-3{
+    float: right;
+    background: #cc1e1a;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 1.9;
+    padding: 0px 5px;
+    color: #ffffff;
+}
+
+.glyphicon-time{
+ font-size: 18px;
+}
+.glyphicon{
+    top: 4px !important;
+}
+ #chat-circle .badge {
+ background-color: red;
+ font-size: 15px;
+ border-radius: 50%;
+ position: absolute;
+  }
+  .boxchat .material-icons{
+    line-height: 0.5;
+    margin-left: -5px;
+  }
+  .notifi{
+      right: 42px;
+      background-color: red;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      position: fixed;
+      text-align: center;
+      color: white;
+      display: none;
+  }
+  .notifi-chat{
+    display: none;
+  }
+
+  .friend-choose li{
+    list-style: none;
+    display: inline-block;
+   }
+   .friend-choose button{
+       margin: 0px ;
+       margin-left: 5px;
+   }
+   .friend-i{
+     list-style: none;
+     display: inline-block;
+     width: auto;
+     background: #aaaaaa;
+     border: 1px solid #555555;
+     margin-left: 10px;
+     border-radius: 4px;
+   }
+ 
+ .glyphicon-remove{
+ text-align: center;
+ margin-bottom: 15px !important;
+ }
+ .addmem-card{
+    display: inline;
+ }
+ .namechoose{
+    display:inline-block;
+    width:80px;
+    overflow:hidden !important;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+  .joined{
+      margin-left:20px;
+  }
+  .friendname{
+      margin-left: 10px;
+  }
+  .searchmem a{
+      display: flex;
+      margin: 10px 0px 10px 20px;
+  }
+  .searchmem-card a{
+    display: flex;
+    margin: 10px 0px 10px 20px;
+}
+  .dropdown3{
+    margin-top: 20px !important;
+    width: 250px !important;
+}
+
+.w3-bar-item:hover{
+    background-color: #f5f5f5;
+}
+.drop-list{
+    margin-bottom: 5px;
+    background-color: antiquewhite;
 }

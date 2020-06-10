@@ -326,3 +326,7 @@ color: #2196F3;
 .dropdownleft{
   width: 200px !important;
 }
+.joined input{
+  width: 20px;
+    height: 20px;
+}

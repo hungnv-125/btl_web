@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('home');
+    return view('index');
 });
 
 Route::get('/home', function () {
@@ -56,3 +56,8 @@ Route::post('/searchUser', 'AuthController@searchUser');
 Route::post('/showMess', 'AuthController@showMess');
 Route::post('/saveMess', 'AuthController@saveMess');
 Route::post('/moveCard', 'AuthController@moveCard');
+Route::post('/confirmAddMember', 'AuthController@confirmAddMember');
+Route::post('/getNotifi', 'AuthController@getNotifi');
+Route::post('/getMemberCard', 'AuthController@getMemberCard');
+Route::post('/updateMemberCard', 'AuthController@updateMemberCard');
+Route::post('/updateDeadLine', 'AuthController@updateDeadLine');

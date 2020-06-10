@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AttachFile;
 use App\Models\Lists;
+use App\Models\MemberTask;
 use App\Models\Member_prj;
 use App\Models\Message;
+use App\Models\Notification;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Work;
@@ -131,6 +133,7 @@ class AuthController extends Controller
         $task = new Task();
         $task->name = $req->card_name;
         $task->id_list = $req->id_list;
+        $task->deadline = $req->deadline;
 
         $task->save();
 
@@ -256,5 +259,77 @@ class AuthController extends Controller
         ]);
 
         return;
+    }
+
+    public function confirmAddMember(Request $req)
+    {
+        $id_prj = $req->id_prj;
+
+        $arr_user = explode(',', $req->id_users);
+        $user = array();
+
+        for ($i = 0; $i < count($arr_user); $i++) {
+            $member = new Member_prj();
+            $member->id_prj = $id_prj;
+            $member->id_user = $arr_user[$i];
+
+            $member->save();
+
+            $notifi = new Notification();
+            $notifi->content = 'Bạn vừa được thêm vào dự án <u>' . $req->name_prj . '</u>';
+            $notifi->id_user = $arr_user[$i];
+
+            $notifi->save();
+            \array_push($user, User::find($arr_user[$i]));
+        }
+
+        return json_encode(['user' => $user]);
+    }
+
+    public function getNotifi(Request $req)
+    {
+        $notifies = Notification::where([['id_user', $req->id_user], ['status', 0]])->get();
+
+        for ($i = 0; $i < count($notifies); $i++) {
+            // $notifies[$i]->status = 1;
+
+            $notifies[$i]->update([
+                'status' => 1,
+            ]);
+        }
+
+        return json_encode(['notifies' => $notifies]);
+    }
+
+    public function getMemberCard(Request $req)
+    {
+        $user_prj = Project::find($req->id_prj)->user()->get();
+        $user_card = Task::find($req->id_card)->member()->get();
+
+        return \json_encode(['user_prj' => $user_prj, 'user_card' => $user_card]);
+    }
+
+    public function updateMemberCard(Request $req)
+    {
+        if ($req->status) {
+            $mem = new MemberTask();
+            $mem->id_user = $req->id_user;
+            $mem->id_task = $req->id_card;
+
+            $mem->save();
+        } else {
+            $mem = MemberTask::where([['id_user', $req->id_user], ['id_task', $req->id_card]])->delete();
+
+            // return \json_encode(['mem' => $mem]);
+        }
+        return;
+    }
+
+    public function updateDeadLine(Request $req)
+    {
+        $task = Task::find($req->id_card);
+        $task->deadline = $req->deadline;
+
+        $task->save();
     }
 }

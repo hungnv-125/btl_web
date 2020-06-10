@@ -10,4 +10,7 @@ class MemberTask extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'id_card', 'id_user',
+    ];
 }

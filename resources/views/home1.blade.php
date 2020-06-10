@@ -11,16 +11,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="{{asset('css/home.css')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('css/project.css')}}">
+
     <link rel="stylesheet" href="{{asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')}}">
 
     <script src="{{ asset('js/jquery.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}"  type="text/javascript"></script>
     <script src="{{ asset('js/home.js')}}"  type="text/javascript"></script>
 
+
     <title>Home</title>
     <style>
         body{
             background:#E0FFFF;
+            position: fixed;
+    width: 100vw;
             }
 
             </style>
@@ -33,7 +38,7 @@
               <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                  <div class="head-item dropdown"><button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-home"></span></button></div>
 
-                 <div class="head-item ">
+                 <!-- <div class="head-item ">
                   <button class="btn btn-info " type="submit"  data-toggle="dropdown" ><span class="glyphicon glyphicon-object-align-top"> </span> <span class="boards"> Boards</span></button>
                   <ul class="dropdown-menu drop-board">
                     <li class="drop-header"> <span class=" glyphicon glyphicon-star-empty "></span> Starred Boards</li>
@@ -44,7 +49,38 @@
                     <li class="drop-header"><span class=" glyphicon glyphicon-user"></span> Personal Boards</li>
                     <li class="drop-list"><a href="#">Tên Personal Project </a></li>
                   </ul>
-                </div>
+                </div> -->
+                <div class="head-item ">
+                <button class="btn btn-info " type="submit"  data-toggle="dropdown" ><span class="glyphicon glyphicon-object-align-top"> </span> <span class="boards"> Boards</span></button>
+                <ul class="dropdown-menu drop-board">
+
+
+                  <li class="drop-header"><span class=" glyphicon glyphicon-user"></span> Personal Boards</li>
+                  <!-- <a href=""><div class="drop-list-board">
+                    <span>Board Name </span>
+                  </div></a>
+                  <a href=""><div class="drop-list-board">
+                   <span>Board Name </span>
+                 </div></a>
+                 <a href=""><div class="drop-list-board">
+                   <span>Board Name </span>
+                 </div></a>
+                 <a href=""><div class="drop-list-board">
+                  <span>Board Name </span>
+                </div></a>
+                <a href=""><div class="drop-list-board">
+                 <span>Board Name </span>
+               </div></a>
+               <a href=""><div class="drop-list-board">
+                 <span>Board Name </span>
+               </div></a> -->
+               @foreach ($project as $prj)
+               <a href="http://localhost/btl_web/public/project?user=<?php echo $id ?>&&prj=<?php echo $prj->id ?>"><div class="drop-list-board">
+                 <span>{{$prj->name}}</span>
+               </div></a>
+               @endforeach
+                </ul>
+              </div>
                  <div class="head-item searchbox">
                     <form class="form-inline">
                             <input class="form-control" type="search" placeholder="Search" aria-label="Search">
@@ -56,7 +92,15 @@
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                   <div id="user" class="user-<?php echo $id ?>">
-                    <a href="#"><img width="38px" src="{{$info->image}}"></a>
+                  <div class="" data-toggle="dropdown"><img width="38px" src="{{$info->image}}" title="{{$info->name}}"></div>
+                    <!-- <a href="#"><img width="38px" src="{{$info->image}}"></a> -->
+
+                    <ul class="dropdown-menu dropdown-menu-right dropprofile">
+                    <li ><a href="" class="profile-item"><span class="username">Profile</span></a></li>
+
+                    <hr>
+                    <li ><a href="http://localhost/btl_web/public/logout" class="profile-item"><span class="username">Log out</span></a></li>
+
                   </div>
                   <div class="head-item2 dropdown ">
                   <button class="btn btn-info " type="submit" data-toggle="dropdown"><span class="glyphicon glyphicon-bell"  ></span></button>
@@ -89,59 +133,32 @@
    <div class="container">
        <div class="row">
            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-               <div class="star">
-                   <h4 class="h">  <span class="bigstar glyphicon glyphicon-star"></span> Starred Boards</h4>
-                   <div class="row">
-                       <div class="col-lg-3 col-sm-4 col-md-4 col-xs-6">
-                         <a href="">
-                         <div class="item">
-                          <span class="project">Project Name</span>
-                          <span class="glyphicon glyphicon-star-empty"></span>
-                         </div>
-                        </a>
-                       </div>
 
-                       <div class="col-lg-3 col-sm-4 col-md-4 col-xs-6 ">
-                        <a href="">
-                          <div class="item">
-                           <span class="project">Project Name</span>
-                           <span class="glyphicon glyphicon-star-empty"></span>
-                          </div>
-                         </a>
-                       </div>
-                       <div class="col-lg-3 col-sm-4 col-md-4 col-xs-6">
-
-                       </div>
-
-
-
-                   </div>
-
-               </div>
+               <!-- </div> -->
 
                <div class="personal">
                 <h4 class="h">  <span class="bigstar glyphicon glyphicon-user"></span> Personal Boards</h4>
                 <div class="row">
-                @foreach ($project as $prj)
-                <div class="col-lg-3 col-sm-4 col-md-4 col-xs-6" onclick="redirectPrj(<?php echo $prj->id ?>)">
-                    <a href="http://localhost/btl_web/public/project?user=<?php echo $id ?>&&prj=<?php echo $prj->id ?>">
-                      <div class="item">
-                       <span class="project">{{$prj->name}}</span>
+                  @foreach ($project as $prj)
+                  <div class="col-lg-3 col-sm-4 col-md-4 col-xs-6" onclick="redirectPrj(<?php echo $prj->id ?>)">
+                      <a href="http://localhost/btl_web/public/project?user=<?php echo $id ?>&&prj=<?php echo $prj->id ?>">
+                        <div class="item">
+                        <span class="project">{{$prj->name}}</span>
 
-                      </div>
-                     </a>
-                   </div>
-                   @endforeach
+                        </div>
+                      </a>
+                    </div>
+                    @endforeach
 
-                   <div class="col-lg-3  col-sm-4 col-md-4 col-xs-6 ad">
-                    <a href="" data-toggle="modal" data-target="#addProjectModal">
-                      <div class="add">
-                       + Add Project
+                    <div class="col-lg-3  col-sm-4 col-md-4 col-xs-6 ad">
+                      <a href="" data-toggle="modal" data-target="#addProjectModal">
+                        <div class="add">
+                        + Add Project
 
-                      </div>
-                     </a>
-                   </div>
-                </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
 
                </div>
 
@@ -170,7 +187,7 @@
         </div>
         <div class="modal-body">
           <label>Fill name of project : </label>
-          <input class="form-control" type="text" id="nameProject" value="name of project">
+          <input class="form-control" type="text" id="nameProject" placeholder="Enter project">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="myFunction2()">Add</button>

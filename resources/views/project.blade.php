@@ -3,18 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="project.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="modal.css"> -->
+
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <!-- <link rel="stylesheet" href="{{asset('css/home.css')}}">
-    <link rel="stylesheet" href="{{asset('css/project.css')}}">
-    <link rel="stylesheet" href="{{asset('css/modal.css')}}"> -->
+
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
     <link rel="stylesheet" href="{{asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/home.css')}}">
@@ -26,6 +18,7 @@
     <script src="{{ asset('js/jquery.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}"  type="text/javascript"></script>
     <script src="{{ asset('js/socket.io.js')}}"  type="text/javascript"></script>
+    <script src="{{ asset('js/realtime.js')}}"  type="text/javascript"></script>
     <script src="{{ asset('js/project.js')}}"  type="text/javascript"></script>
 
     <style>
@@ -40,191 +33,6 @@ body{
 
     </style>
 
-<script>
-var socket = io('http://localhost:6001')
-$(function() {
-  var id_prj = $('.name').attr('id');
-  var id_user = $('#user').attr('class').slice(5);
-  var room = 'room-' + id_prj;
-  var user_image = $('#user > div > img').attr('src');
-  var user_name = $('#user > div > img').attr('title');
-
-
-  // var socket = io('http://localhost:6001')
-    socket.on('chat', function (data) {
-        if($('.chat-box').css('display') == 'block')
-          // generate_message(data, 'self');
-          generate_button_message(data)
-    })
-    socket.emit('room', room);
-
-    socket.on('addcard', function (data) {
-      $('.'+data.id_list).before('<div class="list-item" id="'+data.id_card+'"  ondrop="drop(event)" ondragover="allowDrop(event)"'
-
-            +' draggable="true" ondragstart="drag(event)">'
-            +' <a href="" data-toggle="modal" data-target="#modal2"> '
-                + data.content
-              +' </a>'
-            +' </div>');
-    })
-    socket.on('adddes', function (data) {
-        $('#description').html(data.content);
-    })
-
-    socket.on('updateCheckList', function (data) {
-        if(data.status)
-          $('#work-'+ data.id_work).attr('checked', 'checked');
-        else
-          $('#work-'+ data.id_work).removeAttr('checked');
-    })
-
-    socket.on('addchecklist', function (data) {
-      $('#list_work').append(' <label class="container">' +data.content
-            +' <input type="checkbox" id="work-'+data.id_work+'" onclick="updateCheckList('+data.id_work+'">'
-            + '<span class="checkmark"></span>'
-          +'</label>');
-    })
-
-    socket.on('uploadfile', function  (data) {
-      $('#list_file').append('<a  class="filename" href="'+data.path+'" download>'+ data.content+'</a>');
-    })
-
-    socket.on('moveCard', function (data) {
-
-        var content = $('#'+data.id_drag).html();
-        $('#'+data.id_drag).remove();
-
-        $('#'+data.id_drop).before('<div class="list-item" id="'+data.id_drag+'" ondrop="drop(event)"'
-              +'ondragover="allowDrop(event)" draggable="true" ondragstart="drag(event)" onclick="showModal('+data.id_drag.slice(4)+')">'
-                          +content
-              +'</div>');
-    })
-
-    socket.on('addList', function (data) {
-      $('.add-list').before(  '    <div class="list" id="list-'+data.id_list+'" ></div>');
-      $('#list-'+data.id_list).append(data.html);
-    })
-
-$("#chat-submit").click(function(e) {
-  e.preventDefault();
-  var msg = $("#chat-input").val();
-  if(msg.trim() == ''){
-    return false;
-  }
-  var data ={
-    room : room,
-    msg : msg,
-    name : user_name,
-    image : user_image
-  };
-
-  $.ajax({
-      type:'POST',
-      url: 'saveMess',
-      data:{
-        id_prj : id_prj,
-        id_user : id_user,
-        content : msg,
-       _token: "{{csrf_token()}}"
-      },
-      success: function(res) {
-      }
-    });
-
-  generate_message(data, 'self');
-  socket.emit('chat', data);
-
-
-})
-
-
-function generate_message(data, type) {
-
-  var str="";
-  str += "<div id='cm-msg' class=\"chat-msg "+type+"\">";
-  str += "          <span class=\"msg-avatar\">";
-  str += "            <img src='"+data.image+"'>";
-  str += "          <\/span>";
-  str += "          <div class=\"cm-msg-text\">";
-  str += data.msg;
-  str += "          <\/div>";
-  str += "        <\/div>";
-  $(".chat-logs").append(str);
-
-  if(type == 'self'){
-   $("#chat-input").val('');
-  }
-  $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
-}
-
-
-function generate_button_message(data){
-
-  var str="";
-  str +='<div id="cm-msg-2" class="chat-msg user" style="">'
-        + '<span class="msg-avatar">'
-        + '<img src="'+data.image+'" title="'+data.name+'">'
-        + '</span>'
-        + '<div class="cm-msg-text">'
-        + data.msg
-        + '</div>        </div>';
-
-  $(".chat-logs").append(str);
-
-  $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
-
-}
-
-
-$(document).delegate(".chat-btn", "click", function() {
-  var value = $(this).attr("chat-value");
-  var name = $(this).html();
-  $("#chat-input").attr("disabled", false);
-  generate_message(name, 'self');
-})
-
-
-$("#chat-circle").click(function() {
-
-  $.ajax({
-      type:'POST',
-      url: 'showMess',
-      data:{
-        id_prj : id_prj,
-       _token: "{{csrf_token()}}"
-      },
-      success: function(res) {
-        var json = JSON.parse(res);
-
-        $(".chat-logs").html('');
-
-        for(var i = 0; i < json.message.length; i++){
-          var data={
-            msg : json.message[i].content,
-            name : json.user[i].name,
-            image : json.user[i].image
-          }
-
-          if(json.user[i].id == id_user)
-              generate_message(data, 'self');
-          else
-          generate_button_message(data);
-        }
-      }
-    });
-
-  $("#chat-circle").toggle('scale');
-  $(".chat-box").toggle('scale');
-})
-
-
-$(".chat-box-toggle").click(function() {
-  $("#chat-circle").toggle('scale');
-  $(".chat-box").toggle('scale');
-})
-
-})
-</script>
 
 </head>
 <body>
@@ -235,18 +43,33 @@ $(".chat-box-toggle").click(function() {
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                <div class="head-item dropdown"><button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-home"></span></button></div>
 
-               <div class="head-item ">
-                <button class="btn btn-info " type="submit"  data-toggle="dropdown" ><span class="glyphicon glyphicon-object-align-top"> </span> <span class="boards"> Boards</span></button>
-                <ul class="dropdown-menu drop-board">
-                  <li class="drop-header"> <span class=" glyphicon glyphicon-star-empty "></span> Starred Boards</li>
-                  <li class="drop-list"><a href="#">Tên </a></li>
-                  <li class="drop-list"><a href="#">Stared</a></li>
-                  <li class="drop-list"><a href="#">Project</a></li>
-                  <li class="divider"></li>
-                  <li class="drop-header"><span class=" glyphicon glyphicon-user"></span> Personal Boards</li>
-                  <li class="drop-list"><a href="#">Tên Personal Project </a></li>
-                </ul>
-              </div>
+
+                  <div class="head-item ">
+                    <button class="btn btn-info " type="submit"  data-toggle="dropdown" ><span class="glyphicon glyphicon-object-align-top"> </span> <span class="boards"> Boards</span></button>
+                    <ul class="dropdown-menu drop-board">
+
+
+                      <li class="drop-header"><span class=" glyphicon glyphicon-user"></span> Personal Boards</li>
+                      <a href=""><div class="drop-list-board">
+                        <span>Board Name </span>
+                      </div></a>
+                      <a href=""><div class="drop-list-board">
+                      <span>Board Name </span>
+                    </div></a>
+                    <a href=""><div class="drop-list-board">
+                      <span>Board Name </span>
+                    </div></a>
+                    <a href=""><div class="drop-list-board">
+                      <span>Board Name </span>
+                    </div></a>
+                    <a href=""><div class="drop-list-board">
+                    <span>Board Name </span>
+                  </div></a>
+                  <a href=""><div class="drop-list-board">
+                    <span>Board Name </span>
+                  </div></a>
+                    </ul>
+                  </div>
                <div class="head-item searchbox">
                   <form class="form-inline">
                           <input class="form-control" type="search" placeholder="Search" aria-label="Search">
@@ -261,23 +84,17 @@ $(".chat-box-toggle").click(function() {
                   <!-- <a href="#"><img width="38px" src="image/ava1.png"></a> -->
                   <div class="" data-toggle="dropdown"><img width="38px" src="{{$user->image}}" title="{{$user->name}}"></div>
                   <ul class="dropdown-menu dropdown-menu-right dropprofile">
-                    <li ><a href="" class="profile-item"><span class="username">full name of user</span></a></li>
-                    <hr>
-                    <li ><a href="" class="profile-item"><span class="username">Profile and Visibility</span></a></li>
-                    <li ><a href="" class="profile-item"><span class="username">Activity</span></a></li>
-                    <li ><a href="" class="profile-item"><span class="username">Cards</span></a></li>
-                    <li ><a href="" class="profile-item"><span class="username">Setting</span></a></li>
-                    <hr>
-                    <li ><a href="" class="profile-item"><span class="username">Help</span></a></li>
+                    <li ><a href="" class="profile-item"><span class="username">Profile</span></a></li>
 
                     <hr>
-                    <li ><a href="" class="profile-item"><span class="username">Log out</span></a></li>
+                    <li ><a href="http://localhost/btl_web/public/logout" class="profile-item"><span class="username">Log out</span></a></li>
 
                   <div></div>
                 </div>
-                <div class="head-item2 dropdown ">
+                <div class="head-item2 dropdown" onclick="hideNotifi()">
                 <button class="btn btn-info " type="submit" data-toggle="dropdown"><span class="glyphicon glyphicon-bell"  ></span></button>
-                <ul class="dropdown-menu dropdown-menu-right">
+                <span class="notifi">0</span>
+                <ul class="dropdown-menu dropdown-menu-right" id="dropdown-notifi">
                   <li class="drop-header">Notifications</li>
                   <li class="divider"></li>
                   <li class="drop-list"><a href="#">Chưa</a></li>
@@ -323,6 +140,10 @@ $(".chat-box-toggle").click(function() {
         <div class="dropdown-menu dropdown2" aria-labelledby="dropdownMenu2">
                 <h4 class="modal-title dropdown-item">Add friend</h4>
                 <hr>
+                <div class="friend-choose">
+
+                </div>
+
                 <input class="form-control dropdown-item" id="add-member" onkeyup="searchUser()" autocomplete="off" type="text" placeholder="email address or name " autofocus>
 
                 <div class="searchmem">
@@ -330,7 +151,7 @@ $(".chat-box-toggle").click(function() {
                 </div>
                 <hr>
                 <button type="button dropdown-item" class="btn btn-default dropbtn" data-dismiss="dropdown" onclick="closeSearch()">Close</button>
-                <button type="button dropdown-item" class="btn btn-default dropbtn" >Send invitation</button>
+                <button type="button dropdown-item" class="btn btn-default dropbtn" onclick="confirmAddMember()">Send invitation</button>
 
               </div>
         </div>
@@ -366,7 +187,7 @@ $(".chat-box-toggle").click(function() {
                   <button class="btn  btn-outline-secondary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="	glyphicon glyphicon-cog"></span>
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <div class="dropdown-menu" style="width: 200px !important;" aria-labelledby="dropdownMenuButton">
                       <button class="dropdown-item" type="button">Add Card</button>
                       <button class="dropdown-item" type="button">Copy List</button>
                       <button class="dropdown-item" type="button">Move List</button>
@@ -388,6 +209,10 @@ $(".chat-box-toggle").click(function() {
                       <!-- <div onclick="showModal("> -->
                       <!-- data-toggle="modal" data-target="#modal2" -->
                           {{$t->name}}
+
+                          <div class="duetime"><span class="glyphicon glyphicon-time"></span>
+             {{$t->deadline}}
+            </div>
                           <!-- </div> -->
                       </div>
 
@@ -423,11 +248,20 @@ $(".chat-box-toggle").click(function() {
 <div class="boxchat">
   <div id="body">
 
+
+
   <div id="chat-circle" class="btn btn-raised">
         <div id="chat-overlay"></div>
         <i class="material-icons">chat</i>
+        <span class="notifi-chat badge">0</span>
   </div>
 
+  <!-- <div id="chat-circle" class="btn btn-raised">
+        <div id="chat-overlay"></div>
+
+        <i class="material-icons">chat</i>
+        <span class="badge">3</span>
+  </div> -->
   <div class="chat-box">
     <div class="chat-box-header">
       ChatBot
@@ -514,9 +348,51 @@ $(".chat-box-toggle").click(function() {
                   <a href="#"><img width="33px" src="image/ava1.png"></a>
                 </div>
                 </div>
-                <div class="addmem-modal">
+                <!-- <div class="addmem-modal">
                   <button class="btn btn-outline-info btn-sm" type="submit"data-toggle="modal" data-target="#addfriend"><span class="glyphicon glyphicon-plus-sign"></span></button>
-               </div>
+               </div> -->
+
+               <div class="addmem-card">
+
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-outline-info btn-sm"  id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="getMemberCard()"><span class="glyphicon glyphicon-plus-sign"></span></button>
+
+                    <div class="dropdown-menu dropdown3" aria-labelledby="dropdownMenu3">
+                            <h4 class="modal-title dropdown-item">Add friend</h4>
+                            <hr>
+                            <div class="searchmem-card">
+                              <a href="#" class="w3-bar-item w3-button ">
+                                <div class="listfriend mem">
+                                  <img src="image/ava1.png" width="30px" alt="">
+                                  <span class="friendname">friend name </span>
+                                </div>
+                                <div class="joined">
+                                  <input type="checkbox" >
+                                  <span class="checkjoin"></span>
+                                </div>
+                              </a>
+                              <a href="#" class="w3-bar-item w3-button ">
+                                <div class="listfriend mem">
+                                  <img src="image/ava1.png" width="30px" alt="">
+                                  <span class="friendname">friend name </span>
+                                </div>
+                                <div class="joined">
+                                  <input type="checkbox" checked="checked">
+                                  <span class="checkjoin"></span>
+                                </div>
+                              </a>
+                            </div>
+                            <hr>
+                            <button type="button dropdown-item" class="btn btn-default dropbtn" data-dismiss="dropdown">Close</button>
+                            <button type="button dropdown-item" class="btn btn-default dropbtn" >Send invitation</button>
+
+                          </div>
+                    </div>
+
+
+
+
+                  </div>
               </div>
               <div class="main-description">
                 <h4><span class="	glyphicon glyphicon-align-justify"></span> Description </h4>
@@ -560,7 +436,7 @@ $(".chat-box-toggle").click(function() {
 
               </div>
               <div class="deadline">
-                <h4><span class="glyphicon glyphicon-time"  ></span>Deadline: <input type="date" id="deadline" value=""> </h4>
+                <h4><span class="glyphicon glyphicon-time"  ></span>Deadline: <input type="date" id="deadline" value="" > </h4>
                   <!-- <div  class="btn changedate " onclick="changedate()">Change</div> -->
                   <!-- <label for="deadline">Deadline: </label> -->
 
@@ -668,6 +544,9 @@ $(".chat-box-toggle").click(function() {
           $('#description').html(json.task.description);
           $('.modal-card').removeAttr('id');
           $('.modal-card').attr('id', 'modal-card-'+id);
+          $('#deadline').attr('value', json.task.deadline);
+          $('#deadline').attr('onchange', 'updateDeadline('+json.task.id+')');
+          $('.glyphicon-calendar').parent().html('<span class="glyphicon glyphicon-calendar"></span>'+ json.task.name);
           $('#modal2').modal();
 
         }

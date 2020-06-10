@@ -119,6 +119,7 @@ function drop(ev) {
 
         var data={
           room : 'room-' + $('.name').attr('id'),
+          id_card : id_card,
           id_work : res,
           content : x
         }
@@ -147,13 +148,27 @@ function drop(ev) {
 
   var x= $('#inputcard').val();
   
+  var now = new Date();
+  var nowString = ' '+now.getFullYear() +'-';
+  if(now.getMonth() < 10)
+    nowString += '0'+ now.getMonth();
+  else 
+    nowString += now.getMonth();
+    
+  if(now.getDate() < 10)
+    nowString += '-0'+now.getDate();
+  else  
+    nowString += '-' + now.getDate();    
 
   $('.list-add-'+id).before('<div class="list-item newcard"  ondrop="drop(event)" ondragover="allowDrop(event)"'
 
       +' draggable="true" ondragstart="drag(event)">'
-      +' <a href="" data-toggle="modal" data-target="#modal2"> '
+      // +' <a href="" data-toggle="modal" data-target="#modal2"> '
           + x
-         +' </a>'
+        //  +' </a>'
+        +'<div class="duetime"><span class="glyphicon glyphicon-time"></span>'
+             +nowString
+            +'</div>'
       +' </div>');
 
        $('#locationadd-'+id).html('');
@@ -164,11 +179,12 @@ function drop(ev) {
         data:{
          id_list : id,
          card_name : x,
+         deadline : nowString,
          _token: "{{csrf_token()}}"
         },
         success: function(res) {
           $('.newcard').attr('id', 'drag-'+res);
-          
+          $('.newcard').attr('onclick', 'showModal('+res+')');
 
         
           var room = 'room-' + $('.name').attr('id');
@@ -338,9 +354,9 @@ function drop(ev) {
             $('.searchmem').html('');
             for(var i =0; i < json.users.length; i++){
               var name = json.users[i].name;
-              $('.searchmem').append(' <div style="cursor : pointer;" class="w3-bar-item w3-button" onclick="addMember(\''+name+'\')">'
+              $('.searchmem').append(' <div style="cursor : pointer;" class="w3-bar-item w3-button" onclick="addMember(\''+json.users[i].name+'\',' +json.users[i].id+')">'
             +'    <div class="listfriend mem">'
-            +'      <img src="image/ava1.png" width="30px" alt="">'
+            +'      <img src="'+json.users[i].image+'" width="30px" alt="">'
             +'      <span class="friendname">'+json.users[i].name+' </span>'
             +'    </div>'  
             +'  </div> <br>');
@@ -354,22 +370,209 @@ function drop(ev) {
     }
   }
 
+  var arr_search = new Array();
+  function addMember(name, id){
+    $('.friend-choose').append(' <li class="friend-i" id="friend-'+id+'">'+name 
+    +'<button type="buton" styel="width:15px; height :20px;" class="btn btn-outline-secondary" onclick="deleteSearch('+id+')">X</button>'
+    +'</li>')
 
-  function addMember(name){
-      $('.member').append('<div class="mem">'
-        +'  <img width="30px" src="image/ava1.png" title="'+name+'">'
-        +'  </div>')
+    arr_search.push(id);
+    $('#add-member').val('');
+    $('.searchmem').html('');
+    }
+
+  function confirmAddMember(){
+    if(arr_search.length > 0){
+      $.ajax({
+        type:'POST',
+        url: 'confirmAddMember',
+        data:{
+        id_users : arr_search.toString(),
+        id_prj : $('.name').attr('id'),
+        name_prj : $('.name').html(),
+        _token: "{{csrf_token()}}"
+        },
+        success: function(res) {
+            var json = JSON.parse(res);
+            // alert(res);
+            for(var i = 0; i <json.user.length; i++){
+              $('.member').append('<div class="mem">'
+              +'<img width="30px" src="'+json.user[i].image+'" title="'+json.user[i].name+'">'
+              +'</div>')
+
+              data={
+                id : json.user[i].id,
+                content : 'Bạn vừa được thêm vào dự án <u>'+ $('.name').html()+'</u>'
+              }
+              // alert(data.id);
+              socket.emit('notification', data);
+            }
+
+            arr_search = new Array();
+            $('.dropdown2').hide();
+
+          
+         }
+      });
+  }
+  }  
+
+  function deleteSearch(id){
+      $('#friend-'+id).remove();
+      for(var i = 0; i < arr_search.length; i++){
+        if(arr_search[i] === id){
+          arr_search.splice(i, 1);
+          break;
+        }
       }
+  }  
   function closeSearch(){
     $('.dropdown2').hide();
 
   }
 
   function showSearch(){
-   
+    $('.friend-choose').html('');
     $('.searchmem').html('');
     $('#add-member').val('');
     $('.dropdown2').show();
   }
 
   
+function hideNotifi(){
+  // if($('.notifi').css('display') == 'inline-block'){
+    $('.notifi').html('0');
+    $('.notifi').css('display', 'none');
+  // }
+
+  // if($('#dropdown-notifi').css('display') == 'none'){
+    $('#dropdown-notifi').html('<li class="drop-header">Notifications</li>'
+                                +'<li class="divider"></li>');
+    
+    
+            $.ajax({
+              type:'POST',
+              url: 'getNotifi',
+              data:{
+              id_user : $('#user').attr('class').slice(5),
+              _token: "{{csrf_token()}}"
+              },
+              success: function(res) {
+                // alert(res);
+                  var json = JSON.parse(res);
+                  var i;
+
+                   for(i = 0; i < json.notifies.length; i++){
+                    $('#dropdown-notifi').append('<li class="drop-list">'+json.notifies[i].content+'</li>');
+                   }
+                }
+            });
+
+  // }
+    
+  
+}
+
+function getMemberCard(){
+    var id_prj = $('.name').attr('id');
+    var id_card = $('.modal-card').attr('id').slice(11);
+
+    $.ajax({
+      type:'POST',
+      url: 'getMemberCard',
+      data:{
+      id_prj : id_prj,
+      id_card : id_card,
+      _token: "{{csrf_token()}}"
+      },
+      success: function(res) {
+        $('.searchmem-card').html('');
+        var json = JSON.parse(res);
+
+        var i,j;
+        for(i =0; i< json.user_prj.length; i++){
+            $('.searchmem-card').append('<a href="#" class="w3-bar-item w3-button ">'
+                +'<div class="mem">'
+                +' <img src="'+json.user_prj[i].image+'" width="30px" alt="">'
+                +' <span class="friendname">'+json.user_prj[i].name+'</span>'
+                +'</div>'
+                +'<div class="joined">'
+                +'  <input type="checkbox" id="mem-card-'+json.user_prj[i].id+'" onclick="updateMemberCard('+json.user_prj[i].id+')">'
+                +'  <span class="checkjoin"></span>'
+                +'</div>'
+                +' </a>');
+
+            for(j = 0; j < json.user_card.length; j++){
+              if(json.user_prj[i].id == json.user_card[j].id){
+                $('#mem-card-'+json.user_prj[i].id).attr('checked', 'checked');
+              }
+            }    
+        }
+      } 
+    });
+}
+
+function updateMemberCard(id_user){
+  var  id_card = $('.modal-card').attr('id').slice(11);
+
+  var attr = $('#mem-card-'+ id_user).attr('checked');
+  var status = 1;
+  if (typeof attr !== typeof undefined && attr !== false) {
+    status = 0;
+    $('#mem-card-'+ id_user).removeAttr('checked');
+  }
+  else{
+    $('#mem-card-'+ id_user).attr('checked', 'checked');
+  }
+
+  $.ajax({
+    type:'POST',
+    url: 'updateMemberCard',
+    data:{
+    id_user : id_user,
+    id_card : id_card,
+    status : status,
+    _token: "{{csrf_token()}}"
+    },
+    success: function(res) {
+      
+    } 
+  });
+
+  var data={
+    room : 'room-' + $('.name').attr('id'),
+    id_card : id_card,
+    id_user : id_user,
+    status : status
+  }
+
+  socket.emit('updateMemberCard', data);
+}
+
+function updateDeadline(id){
+  var deadline = $('#deadline').val();
+  
+
+  $.ajax({
+    type:'POST',
+    url: 'updateDeadLine',
+    data:{
+    id_card : id,
+    deadline : deadline,
+    _token: "{{csrf_token()}}"
+    },
+    success: function(res) {
+      
+    } 
+  });
+
+
+  $('#drag'+id +'> div').html('<span class="glyphicon glyphicon-time"></span>'+' '+ deadline);
+  var data= {
+    room : 'room-' + $('.name').attr('id'),
+    id_card : id,
+    deadline : deadline
+  }
+
+  socket.emit('updateDeadline', data);
+}
